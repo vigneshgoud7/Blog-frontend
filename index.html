@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Beyond - A Responsive HTML Website</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Define custom font family for Tailwind */
+        .font-montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+        /* Custom loader animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loader {
+            border-top-color: #3B82F6;
+            animation: spin 1s linear infinite;
+        }
+        /* Hide elements by default */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 text-gray-800 font-roboto antialiased">
+
+    <!-- App Container -->
+    <div id="app-container">
+
+        <!-- Header/Navigation -->
+        <header id="header" class="bg-white shadow-xl">
+            <nav class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                <!-- Site Title -->
+                <button id="home-button" class="font-bold text-gray-800 mb-4 sm:mb-0 drop-shadow-lg bg-transparent border-none cursor-pointer p-0 font-montserrat">
+                    <span class="text-5xl lg:text-6xl leading-none">B</span>
+                    <span class="text-4xl leading-none">log & </span>
+                    <span class="text-5xl lg:text-6xl leading-none">B</span>
+                    <span class="text-4xl leading-none">eyond</span>
+                </button>
+
+                <!-- Navigation Links, Search, etc. -->
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 items-center text-lg w-full sm:w-auto">
+                    <ul class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 items-center text-lg">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-800 transition-colors duration-200">Categories</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-800 transition-colors duration-200">About</a></li>
+                        <li><button id="contact-button" class="text-gray-600 hover:text-blue-800 transition-colors duration-200 bg-transparent border-none cursor-pointer">Contact</button></li>
+                    </ul>
+
+                    <!-- Search -->
+                    <div class="relative flex items-center w-full sm:w-auto">
+                        <input id="search-input" type="text" placeholder="Search blogs..." class="pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 w-full text-base bg-white text-gray-700">
+                        <button type="button" class="absolute right-0 top-0 h-full px-3 text-gray-600 hover:text-blue-600 transition-colors duration-200" aria-label="Search">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="dark-mode-toggle" class="p-2 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200 shadow-sm" aria-label="Toggle Dark Mode">
+                        <!-- Moon Icon -->
+                        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                        <!-- Sun Icon (hidden by default) -->
+                        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-4.707l-.707-.707M6.086 18.086l-.707-.707M18.086 6.086l-.707-.707M6.086 6.086l-.707.707M12 18a6 6 0 100-12 6 6 0 000 12z" /></svg>
+                    </button>
+
+                    <!-- New Post Button -->
+                    <button id="new-post-button" class="ml-0 sm:ml-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-md w-full sm:w-auto">New Post</button>
+                </div>
+            </nav>
+
+            <!-- Logo and Quote Section -->
+            <div class="container mx-auto px-4 py-8 text-center">
+                <div class="mb-6">
+                    <svg class="w-24 h-24 mx-auto text-blue-600" id="header-logo" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-light italic text-gray-700 max-w-2xl mx-auto">
+                    "Where thoughts take flight, and stories find their light. Dive in, and go <strong class="font-bold">Beyond</strong> the words."
+                </h2>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Left Column for Blog Posts -->
+                <div class="lg:col-span-3">
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-8 text-left">Latest Blogs</h1>
+                    <div id="latest-blogs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <!-- Blog posts will be injected here by JavaScript -->
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mt-12 mb-8 text-left">Most Popular Blogs</h1>
+                    <div id="popular-blogs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <!-- Popular blog posts will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Right Column (Sidebar) -->
+                <div id="sidebar" class="lg:col-span-1 bg-white rounded-lg shadow-xl p-6 lg:block hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Categories</h2>
+                    <ul id="categories-list" class="space-y-2">
+                        <!-- Categories will be injected here -->
+                    </ul>
+                    <h2 class="text-xl font-semibold text-gray-800 mt-6 mb-4">About</h2>
+                    <p class="text-gray-600 text-sm">Welcome to Blog & Beyond! We share insights on modern web technologies, design, and engaging content strategies.</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-6 mt-8">
+            <div class="container mx-auto px-4 text-center text-sm">
+                &copy; <span id="footer-year"></span> Blog & Beyond. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODALS (hidden by default) -->
+
+    <!-- New Post Modal -->
+    <div id="new-post-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Create New Post</h2>
+            <form id="new-post-form">
+                <div class="mb-4">
+                    <label for="postTitle" class="block text-gray-800 text-sm font-bold mb-2">Title</label>
+                    <input type="text" id="postTitle" class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md bg-white text-gray-700" required>
+                </div>
+                <div class="mb-4">
+                    <label for="postAuthor" class="block text-gray-800 text-sm font-bold mb-2">Your Name</label>
+                    <input type="text" id="postAuthor" class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md bg-white text-gray-700" required>
+                </div>
+                <div class="mb-6">
+                    <label for="postContent" class="block text-gray-800 text-sm font-bold mb-2">Content</label>
+                    <textarea id="postContent" rows="6" class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md bg-white text-gray-700" required></textarea>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 shadow-md">Publish Post</button>
+                    <button type="button" id="cancel-new-post" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 shadow-md">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Contact Us</h2>
+            <p class="text-gray-700 text-lg mb-4"><strong class="font-semibold">Email:</strong> nakerakantivignesh@gmail.com</p>
+            <p class="text-gray-700 text-lg mb-6"><strong class="font-semibold">Phone:</strong> 6304770509</p>
+            <button id="close-contact-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 shadow-md">Close</button>
+        </div>
+    </div>
+
+    <!-- Spark Thoughts Modal -->
+    <div id="spark-thoughts-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Spark Thoughts</h2>
+            <div id="spark-thoughts-content">
+                <!-- Content will be injected here -->
+            </div>
+            <div class="mt-8 text-center">
+                <button id="close-spark-thoughts-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 shadow-md">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Modal -->
+    <div id="summary-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Post Summary</h2>
+            <div id="summary-content">
+                <!-- Content will be injected here -->
+            </div>
+            <div class="mt-8 text-center">
+                <button id="close-summary-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 shadow-md">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Full Post Modal -->
+    <div id="full-post-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center p-4 z-50 hidden overflow-y-auto">
+      <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl my-8">
+        <h2 id="full-post-title" class="text-3xl font-bold text-gray-800 mb-4"></h2>
+        <p id="full-post-meta" class="text-gray-600 text-sm mb-4"></p>
+        <img id="full-post-image" src="" alt="" class="w-full h-64 object-cover rounded-md mb-6"/>
+        <p id="full-post-content" class="text-gray-700 text-base leading-relaxed whitespace-pre-wrap"></p>
+        <div class="mt-8 text-center">
+          <button id="close-full-post-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 shadow-md">Close</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script type="module">
+        // --- DATA ---
+        let blogPosts = [
+             {
+              id: 1,
+              image: "https://thumbs.dreamstime.com/b/web-development-coding-programming-internet-technology-business-concept-web-development-coding-programming-internet-technology-121903546.jpg",
+              alt: "Modern Web Development tools and coding",
+              title: "Exploring the Wonders of Modern Web Development",
+              content: "Dive into the latest trends and technologies shaping the web development landscape. This article covers new frameworks, essential tools, and best practices for building high-performance web applications. Learn about concepts like progressive web apps, single-page applications, and server-side rendering, and how they can be applied to create cutting-edge user experiences. We also touch upon the importance of security and accessibility in modern web development. The modern web development landscape is rapidly evolving, driven by advancements in browser technologies, new programming paradigms, and increasing user demands for fast, interactive, and secure online experiences. Front-end frameworks like React, Vue, and Angular continue to dominate, offering powerful tools for building complex user interfaces with component-based architectures. Back-end development is seeing a shift towards microservices and serverless architectures, enabling scalable and cost-efficient solutions. Cloud platforms such as AWS, Google Cloud, and Azure provide a rich ecosystem of services for deployment, database management, and more. Beyond technical skills, understanding user experience (UX) and user interface (UI) design principles is crucial for creating intuitive and aesthetically pleasing applications. The rise of WebAssembly also hints at new possibilities for performance-intensive applications directly in the browser. Embracing continuous integration and continuous deployment (CI/CD) practices is essential for rapid iteration and reliable releases. Security best practices, including secure coding and vulnerability testing, are paramount to protect user data and maintain trust. Accessibility (a11y) should be a core consideration from the outset, ensuring your applications are usable by everyone, regardless of their abilities. The open-source community plays a vital role, providing a vast array of libraries, tools, and resources that accelerate development and foster innovation. Staying updated with new standards and technologies, such as Web3 and augmented reality in the browser, will be key for future-proofing web applications.",
+              author: "Jane Doe",
+              category: "Web Development"
+            },
+            {
+              id: 2,
+              image: "https://i.pinimg.com/736x/d1/a9/ff/d1a9ffa6160e6cfc26c3ca5f1a07a017.jpg",
+              alt: "Person writing on paper with a pen",
+              title: "The Art of Crafting Engaging Content",
+              content: "Tips and tricks for creating compelling blog posts that captivate your audience. Discover how to hook your readers from the first sentence, structure your arguments logically, and use storytelling to make your content memorable. We'll explore techniques for writing strong headlines, optimizing for readability, and incorporating visuals effectively to enhance your message. Crafting engaging content is more than just stringing words together; it's about connecting with your audience on an emotional and intellectual level. Start with a strong hook—a question, a surprising fact, or a bold statement—to grab attention immediately. Structure your content with clear headings, subheadings, and short paragraphs to improve readability and guide your reader through your narrative. Incorporate storytelling elements to make complex ideas relatable and memorable. People are hardwired for stories, and they help illustrate your points in a vivid way. Use active voice and strong verbs to make your writing dynamic and direct. Optimize for readability by avoiding jargon, using simple language where possible, and breaking up long sentences. Visuals, such as images, infographics, and videos, can significantly enhance your message and break up text, making your content more appealing and digestible. Finally, always include a clear call to action, guiding your readers on what to do next, whether it's leaving a comment, sharing the post, or exploring related content. By focusing on these elements, you can transform ordinary writing into compelling content that truly resonates with your audience.",
+              author: "John Smith",
+              category: "Content Creation"
+            },
+            {
+              id: 3,
+              image: "https://matchboxdesigngroup.com/wp-content/uploads/2022/03/working-on-website-design-1024x684.jpg",
+              alt: "Person using multiple devices for responsive testing",
+              title: "Responsive Design: A Must for Modern Websites",
+              content: "Understand why responsive design is crucial and how to implement it effectively. This guide will walk you through the principles of fluid grids, flexible images, and media queries to ensure your website looks great on any device, from smartphones to large desktop monitors. We'll discuss common pitfalls and best practices for creating a truly adaptive user interface. In today's multi-device world, responsive design is no longer a luxury but a necessity. Users access websites from a vast array of devices, each with different screen sizes, resolutions, and interaction methods. A responsive website automatically adjusts its layout and content to provide an optimal viewing experience, regardless of the device. This involves using fluid grids, which means layouts are based on percentages rather than fixed pixel widths, allowing them to stretch and shrink. Flexible images are another core component, ensuring media scales appropriately without breaking the design. Crucially, media queries allow developers to apply different CSS styles based on device characteristics like width, height, and orientation, enabling tailored experiences. Common pitfalls include neglecting mobile-first design, which prioritizes the smallest screen size first before scaling up, leading to better performance and user experience on mobile. Another mistake is relying too heavily on JavaScript for layout adjustments when CSS can often handle it more efficiently. Best practices also involve optimizing touch targets for mobile users, ensuring buttons and links are large enough to be easily tapped. Performance optimization, such as lazy loading images and minifying assets, is also key to a smooth responsive experience. Ultimately, responsive design ensures your content is accessible and enjoyable for everyone, everywhere.",
+              author: "Alice Johnson",
+              category: "Design Principles"
+            },
+            {
+              id: 4,
+              image: "https://svitla.com/uploads/ckeditor/2023/hybrid%20architecture%20on%20Google%20Cloud.png",
+              alt: "Cloud architecture diagram or serverless infrastructure",
+              title: "Introduction to Serverless Architectures",
+              content: "Explore the benefits of serverless computing and how it can simplify your deployments. This article delves into the concepts of Function as a Service (FaaS), Backend as a Service (BaaS), and how serverless models reduce operational overhead. We'll cover popular serverless platforms and discuss use cases where serverless architectures truly shine, offering scalability and cost-efficiency. Serverless architecture represents a paradigm shift in how applications are built and deployed, moving away from managing servers to focusing solely on writing code. The core idea is that cloud providers abstract away the underlying infrastructure, allowing developers to deploy individual functions or services that scale automatically based on demand. Function as a Service (FaaS) is a key component, where developers write code snippets (functions) that execute in response to events, such as an HTTP request or a database update. Backend as a Service (BaaS) provides ready-to-use backend functionalities like databases, authentication, and storage, further reducing the need for server management. The primary benefits include reduced operational overhead, as developers no longer need to provision, scale, or maintain servers. This leads to lower costs, as you only pay for the compute time your functions consume. Serverless solutions offer inherent scalability, effortlessly handling fluctuating traffic. Common use cases include APIs, data processing, chatbots, and IoT backends. Popular serverless platforms include AWS Lambda, Google Cloud Functions, Azure Functions, and Netlify Functions. While serverless simplifies deployment, considerations like cold starts, vendor lock-in, and debugging distributed systems are important for successful adoption. Overall, serverless computing empowers developers to build and deploy applications faster and more efficiently.",
+              author: "Bob Williams",
+              category: "Cloud Computing"
+            },
+        ];
+
+        const popularBlogPosts = [
+            {
+              id: 5,
+              image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              alt: "Hands typing on a keyboard",
+              title: "Mastering React Hooks for State Management",
+              content: "A comprehensive guide to effectively using React Hooks for cleaner and more efficient code. This article covers useState, useEffect, useContext, and custom hooks, showing how they can simplify complex state logic and improve component reusability. Dive deep into practical examples and common patterns for managing application state with React Hooks. React Hooks, introduced in React 16.8, revolutionized state management and side effects in functional components, eliminating the need for class components in many scenarios. `useState` allows functional components to manage local state, making it simple to add dynamic data. `useEffect` handles side effects like data fetching, subscriptions, or manually changing the DOM, providing a clean way to separate concerns. `useContext` simplifies consuming context, avoiding deeply nested render props. Custom Hooks allow you to extract reusable stateful logic from components, promoting code sharing and reducing duplication. For example, a custom `useFetch` hook could encapsulate data fetching logic, making it easy to reuse across multiple components. The Hooks paradigm encourages a more functional and declarative way of writing React applications, leading to cleaner, more readable, and easier-to-test code. While there's a learning curve, mastering Hooks unlocks a powerful way to build scalable and maintainable React applications. Understanding their dependency arrays and memoization techniques (`useMemo`, `useCallback`) is crucial for optimizing performance and preventing unnecessary re-renders. Hooks also play well with modern state management libraries like Redux Toolkit and Zustand, providing flexible options for global state.",
+              author: "Charlie Brown",
+              category: "React"
+            },
+            {
+              id: 6,
+              image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              alt: "Code on a screen",
+              title: "Optimizing Web Performance: Best Practices",
+              content: "Techniques and tools to significantly improve your website's loading speed and user experience. Learn about image optimization, lazy loading, code splitting, and caching strategies that can dramatically boost your site's performance. We'll also cover the importance of Core Web Vitals and how to measure and improve them for a better user experience. Web performance optimization is crucial for user engagement, SEO, and conversion rates. A slow website frustrates users and can lead to high bounce rates. Image optimization is a fundamental step: compress images, use modern formats like WebP, and serve appropriately sized images. Lazy loading images and videos ensures they only load when they enter the viewport, saving bandwidth and improving initial page load times. Code splitting breaks down your JavaScript bundles into smaller chunks, loading only what's necessary for the current view. Caching strategies, both browser-side and server-side, reduce redundant data fetching. Minifying CSS, JavaScript, and HTML removes unnecessary characters, reducing file sizes. Using a Content Delivery Network (CDN) can deliver assets faster by serving them from geographically closer servers. Core Web Vitals (Largest Contentful Paint, First Input Delay, Cumulative Layout Shift) are key metrics Google uses to assess user experience; optimizing for these can improve search rankings. Regular auditing with tools like Lighthouse or WebPageTest can identify performance bottlenecks. Prioritizing critical rendering path CSS and JavaScript also speeds up perceived load times. By implementing these practices, you can significantly enhance your website's speed and provide a superior user experience.",
+              author: "David Lee",
+              category: "Performance"
+            },
+        ];
+        
+        // --- STATE VARIABLES ---
+        let searchTerm = '';
+        let selectedCategory = 'All';
+        let isDarkMode = false;
+        
+        // --- DOM ELEMENTS ---
+        const body = document.body;
+        const latestBlogsGrid = document.getElementById('latest-blogs-grid');
+        const popularBlogsGrid = document.getElementById('popular-blogs-grid');
+        const categoriesList = document.getElementById('categories-list');
+        const searchInput = document.getElementById('search-input');
+        
+        // Modal elements
+        const newPostModal = document.getElementById('new-post-modal');
+        const contactModal = document.getElementById('contact-modal');
+        const sparkThoughtsModal = document.getElementById('spark-thoughts-modal');
+        const summaryModal = document.getElementById('summary-modal');
+        const fullPostModal = document.getElementById('full-post-modal');
+        
+        // Buttons
+        const newPostButton = document.getElementById('new-post-button');
+        const cancelNewPostButton = document.getElementById('cancel-new-post');
+        const contactButton = document.getElementById('contact-button');
+        const closeContactModalButton = document.getElementById('close-contact-modal');
+        const closeSparkThoughtsModalButton = document.getElementById('close-spark-thoughts-modal');
+        const closeSummaryModalButton = document.getElementById('close-summary-modal');
+        const closeFullPostModalButton = document.getElementById('close-full-post-modal');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const homeButton = document.getElementById('home-button');
+        
+        // Forms
+        const newPostForm = document.getElementById('new-post-form');
+        
+        // --- HELPER FUNCTIONS ---
+
+        // Calculate reading time
+        const calculateReadingTime = (text) => {
+            const wordsPerMinute = 200;
+            const words = text.split(/\s+/).length;
+            const minutes = Math.ceil(words / wordsPerMinute);
+            return `${minutes} min read`;
+        };
+
+        // Get loader HTML
+        const getLoaderHTML = (text) => `
+            <div class="text-center py-8">
+                <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4 mx-auto"></div>
+                <p class="text-gray-700 dark:text-gray-300">${text}</p>
+            </div>
+        `;
+
+        // --- RENDER FUNCTIONS ---
+        
+        // Creates a blog post card HTML string
+        const createPostCard = (post) => {
+            const contentSnippet = post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content;
+            return `
+                <div data-post-id="${post.id}" class="blog-card bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer">
+                    <img src="${post.image}" alt="${post.alt}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">${post.title}</h2>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">By ${post.author} - ${calculateReadingTime(post.content)}</p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">${contentSnippet}</p>
+                        <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-2">
+                           <button data-action="spark" data-post-id="${post.id}" class="px-3 py-1 bg-purple-600 text-white rounded-md text-sm hover:bg-purple-700 transition-colors duration-200 shadow-md">✨ Spark Thoughts</button>
+                           <button data-action="summary" data-post-id="${post.id}" class="px-3 py-1 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition-colors duration-200 shadow-md">✨ Summarize Post</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+        
+        // Renders blog posts to the specified grid
+        const renderPosts = () => {
+            // Filter posts based on search and category
+            let filteredPosts = blogPosts.filter(post =>
+                (post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 post.author.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                (selectedCategory === 'All' || post.category === selectedCategory)
+            );
+            
+            // Clear the grid
+            latestBlogsGrid.innerHTML = '';
+            
+            // Render posts or "not found" message
+            if (filteredPosts.length > 0) {
+                filteredPosts.forEach(post => {
+                    latestBlogsGrid.innerHTML += createPostCard(post);
+                });
+            } else {
+                latestBlogsGrid.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 text-lg">No matching blog posts found.</p>`;
+            }
+        };
+
+        const renderPopularPosts = () => {
+            popularBlogsGrid.innerHTML = '';
+            popularBlogPosts.forEach(post => {
+                popularBlogsGrid.innerHTML += createPostCard(post);
+            });
+        };
+        
+        // Renders categories in the sidebar
+        const renderCategories = () => {
+            const categories = ['All', ...new Set(blogPosts.map(post => post.category))];
+            categoriesList.innerHTML = '';
+            categories.forEach(category => {
+                const buttonClass = selectedCategory === category 
+                    ? 'bg-blue-100 text-blue-800 font-bold' 
+                    : 'text-gray-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300';
+                categoriesList.innerHTML += `
+                    <li>
+                        <button data-category="${category}" class="category-button block w-full text-left py-1 px-3 rounded-md transition-colors duration-200 ${buttonClass}">
+                            ${category}
+                        </button>
+                    </li>
+                `;
+            });
+        };
+        
+        // --- EVENT HANDLERS ---
+        
+        // Search handler
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderPosts();
+        });
+        
+        // Category click handler (using event delegation)
+        categoriesList.addEventListener('click', (e) => {
+            if (e.target.matches('.category-button')) {
+                selectedCategory = e.target.dataset.category;
+                renderPosts();
+                renderCategories(); // Re-render to update active state
+            }
+        });
+        
+        // New post form submission
+        newPostForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPost = {
+                id: blogPosts.length + popularBlogPosts.length + 1,
+                image: "https://placehold.co/600x400/AD9D6B/ffffff?text=New+Post",
+                alt: "New blog post image",
+                title: document.getElementById('postTitle').value,
+                content: document.getElementById('postContent').value,
+                author: document.getElementById('postAuthor').value,
+                category: "General"
+            };
+            blogPosts.unshift(newPost); // Add to the start of the array
+            renderPosts();
+            renderCategories();
+            newPostModal.classList.add('hidden');
+            newPostForm.reset();
+        });
+
+        // Universal card click handler (delegated from grids)
+        const handleCardClick = (e) => {
+            const card = e.target.closest('.blog-card');
+            const button = e.target.closest('button');
+
+            if (!card) return;
+
+            const postId = parseInt(card.dataset.postId);
+            const allPosts = [...blogPosts, ...popularBlogPosts];
+            const post = allPosts.find(p => p.id === postId);
+
+            if (!post) return;
+            
+            // Check if a button inside the card was clicked
+            if (button && button.dataset.action) {
+                e.stopPropagation(); // Prevent modal from opening
+                const action = button.dataset.action;
+                if (action === 'spark') {
+                    handleGenerateSparkThoughts(post.content);
+                } else if (action === 'summary') {
+                    handleGenerateSummary(post.content);
+                }
+            } else {
+                // If not a button, open the full post view
+                openFullPostModal(post);
+            }
+        };
+
+        latestBlogsGrid.addEventListener('click', handleCardClick);
+        popularBlogsGrid.addEventListener('click', handleCardClick);
+
+        // --- LLM API FUNCTIONS ---
+        const handleGenerateSparkThoughts = async (postContent) => {
+            sparkThoughtsModal.classList.remove('hidden');
+            const contentDiv = document.getElementById('spark-thoughts-content');
+            contentDiv.innerHTML = getLoaderHTML('Generating thought-provoking questions...');
+
+            try {
+                const prompt = `Based on the following blog post content, generate 3-5 concise, thought-provoking questions or discussion points. Format each point as a new line starting with a bullet point.\n\nContent: "${postContent}"`;
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates[0]?.content?.parts[0]) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    const thoughts = text.split('\n').filter(line => line.trim() !== '');
+                    contentDiv.innerHTML = `<ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+                        ${thoughts.map(t => `<li>${t.replace(/^\* /, '')}</li>`).join('')}
+                    </ul>`;
+                } else {
+                    throw new Error("Unexpected API response structure");
+                }
+            } catch (error) {
+                console.error("Error generating spark thoughts:", error);
+                contentDiv.innerHTML = `<p class="text-center text-red-500">Failed to generate spark thoughts. Please try again.</p>`;
+            }
+        };
+
+        const handleGenerateSummary = async (postContent) => {
+            summaryModal.classList.remove('hidden');
+            const contentDiv = document.getElementById('summary-content');
+            contentDiv.innerHTML = getLoaderHTML('Generating summary...');
+
+            try {
+                const prompt = `Summarize the following blog post content concisely in 3-4 sentences.\n\nContent: "${postContent}"`;
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates[0]?.content?.parts[0]) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    contentDiv.innerHTML = `<p class="text-gray-700 dark:text-gray-300 text-base leading-relaxed">${text.trim()}</p>`;
+                } else {
+                    throw new Error("Unexpected API response structure");
+                }
+            } catch (error) {
+                console.error("Error generating summary:", error);
+                contentDiv.innerHTML = `<p class="text-center text-red-500">Failed to generate summary. Please try again.</p>`;
+            }
+        };
+        
+        // --- MODAL & UI TOGGLE FUNCTIONS ---
+
+        const openFullPostModal = (post) => {
+            document.getElementById('full-post-title').textContent = post.title;
+            document.getElementById('full-post-meta').textContent = `By ${post.author} - ${calculateReadingTime(post.content)}`;
+            const img = document.getElementById('full-post-image');
+            img.src = post.image;
+            img.alt = post.alt;
+            document.getElementById('full-post-content').textContent = post.content;
+            fullPostModal.classList.remove('hidden');
+        }
+
+        newPostButton.addEventListener('click', () => newPostModal.classList.remove('hidden'));
+        cancelNewPostButton.addEventListener('click', () => newPostModal.classList.add('hidden'));
+        contactButton.addEventListener('click', () => contactModal.classList.remove('hidden'));
+        closeContactModalButton.addEventListener('click', () => contactModal.classList.add('hidden'));
+        closeSparkThoughtsModalButton.addEventListener('click', () => sparkThoughtsModal.classList.add('hidden'));
+        closeSummaryModalButton.addEventListener('click', () => summaryModal.classList.add('hidden'));
+        closeFullPostModalButton.addEventListener('click', () => fullPostModal.classList.add('hidden'));
+        
+        homeButton.addEventListener('click', () => {
+            searchTerm = '';
+            selectedCategory = 'All';
+            searchInput.value = '';
+            renderPosts();
+            renderCategories();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            
+            // Toggle icons
+            document.getElementById('moon-icon').classList.toggle('hidden');
+            document.getElementById('sun-icon').classList.toggle('hidden');
+
+            // Find all elements that need color changes and toggle classes
+            const elementsToToggle = [
+                body, document.getElementById('header'), ...document.querySelectorAll('.blog-card'),
+                document.getElementById('sidebar'), newPostModal.querySelector('div'),
+                contactModal.querySelector('div'), sparkThoughtsModal.querySelector('div'),
+                summaryModal.querySelector('div'), fullPostModal.querySelector('div'),
+                document.querySelector('#header h2'), ...document.querySelectorAll('#header a, #header button'),
+                document.getElementById('header-logo'), document.getElementById('home-button'),
+                ...document.querySelectorAll('h1, h2, p, label'), ...document.querySelectorAll('input, textarea'),
+                darkModeToggle, ...document.querySelectorAll('.category-button')
+            ];
+
+            // Toggle dark mode classes on the main body
+            body.classList.toggle('bg-blue-50', !isDarkMode);
+            body.classList.toggle('text-gray-800', !isDarkMode);
+            body.classList.toggle('bg-gray-950', isDarkMode);
+            body.classList.toggle('text-gray-100', isDarkMode);
+            
+            // Apply a 'dark' class to a parent container to use Tailwind's `dark:` variants
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // --- INITIALIZATION ---
+        const initializeApp = () => {
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
+            renderPosts();
+            renderPopularPosts();
+            renderCategories();
+        };
+        
+        initializeApp();
+
+    </script>
+</body>
+</html>
